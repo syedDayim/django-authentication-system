@@ -79,3 +79,8 @@ def user_change_password_wo(request):
             form = SetPasswordForm(user=request.user)
         return render(request, 'changePass2.html',{'form': form})
     return HttpResponseRedirect('/login/')
+
+
+
+def home(request):
+    return render(request, 'home.html', {})

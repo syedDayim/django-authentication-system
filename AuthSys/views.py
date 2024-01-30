@@ -52,24 +52,30 @@ def user_logout(request):
 
 # Change password with old password
 def user_change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return redirect('profile')
-    else:
-        form = PasswordChangeForm(user=request.user)
-    return render(request, 'changePass.html',{'form': form})
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PasswordChangeForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                return redirect('profile')
+        else:
+            form = PasswordChangeForm(user=request.user)
+        return render(request, 'changePass.html',{'form': form})
+    return HttpResponseRedirect('/login/')
+
+
 
 # Change Password without old password
 def user_change_password_wo(request):
-    if request.method == 'POST':
-        form = SetPasswordForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return redirect('profile')
-    else:
-        form = SetPasswordForm(user=request.user)
-    return render(request, 'changePass2.html',{'form': form})
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = SetPasswordForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                return redirect('profile')
+        else:
+            form = SetPasswordForm(user=request.user)
+        return render(request, 'changePass2.html',{'form': form})
+    return HttpResponseRedirect('/login/')
